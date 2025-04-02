@@ -1,0 +1,21 @@
+{
+    "routes":[
+        {
+            "src":"/",
+            "dest":"/"
+        },
+        {
+            "src":"/home",
+            "dest":"/"
+        },
+        {
+            "src":"/register",
+            "dest":"/"
+        },
+        {
+            "src":"/login",
+            "dest":"/"
+        }
+        
+    ]
+}
