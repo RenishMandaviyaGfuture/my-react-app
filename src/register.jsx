@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    if(!name || !email || !password){
-      alert("All fields are required");
-      return;
-    }
+    const { name, email, password } = form;
 
     try {
       const res = await axios.post('https://api.escuelajs.co/api/v1/users', {
+        name,
         email,
         password,
-        name,
+      }, {
+        headers: { 'Content-Type': 'application/json' }
       });
 
-      alert('Registration Successfully');
-      navigate('/login');
+      console.log("Registration Successful:", res.data);
+      alert('Registration Successful!');
+      navigate('/login'); 
     } catch (error) {
-      console.log('Error', error);
-      alert('Registration Failed');
+      console.error('Error:', error);
+      alert('Registration Failed! Please try again.');
     }
   };
 
@@ -38,44 +39,47 @@ const Register = () => {
           <h1 className="text-center mb-4">Register</h1>
           <form onSubmit={handleRegister}>
             <div className="mb-3">
-              <label className='form-label' htmlFor="name">UserName:</label>
+              <label className="form-label">Name:</label>
               <input
                 type="text"
+                name="name"
                 className="form-control"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.name}
+                onChange={handleChange}
                 placeholder="Enter your name"
                 required
               />
             </div>
-            <label className='form-label'>Email: </label>
             <div className="mb-3">
+              <label className="form-label">Email:</label>
               <input
                 type="email"
+                name="email"
                 className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={form.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 required
               />
             </div>
             <div className="mb-3">
-              <label className='form-label' htmlFor="password">Password: </label>
+              <label className="form-label">Password:</label>
               <input
                 type="password"
+                name="password"
                 className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={form.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 required
               />
             </div>
             <div className="d-grid">
-              <button type="submit" className="btn btn-primary">
-                Register
-              </button>
+              <button type="submit" className="btn btn-primary">Register</button>
             </div>
-            <h5 className='mt-3'>Already a user?<a href="/login"><span>Login</span></a></h5>
+            <h5 className="mt-3">
+              Already have an account? <a href="/login">Login here</a>
+            </h5>
           </form>
         </div>
       </div>
